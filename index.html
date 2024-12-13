@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Live Code Editor</title>
+    <link rel="stylesheet" href="./style.css">
+    <script src="https://kit.fontawesome.com/b9b125ebec.js" crossorigin="anonymous"></script>
+</head>
+
+<body>
+    <center>
+        <h1 id="heading">Live Code Editor</h1>
+    </center>
+    <div class="container">
+        <div class="left">
+            <label><i class="fa-brands fa-html5"></i> HTML</label>
+            <textarea id="html-code" onkeyup="run()"></textarea>
+            <label><i class="fa-brands fa-css3-alt"></i> CSS</label>
+            <textarea id="css-code" onkeyup="run()"></textarea>
+            <label><i class="fa-brands fa-js"></i> JavaScript</label>
+            <textarea id="js-code" onkeyup="run()"></textarea>
+            <button id="submit-button" onclick="saveFiles()">Download files individually</button>
+        </div>
+        <div class="right">
+            <label><i class="fa-solid fa-play"></i> Output</label>
+            <iframe id="output"></iframe>
+        </div>
+    </div>
+    <script>
+        function run() {
+            let htmlcode = document.getElementById("html-code").value;
+            let csscode = document.getElementById("css-code").value;
+            let jscode = document.getElementById("js-code").value;
+            let output = document.getElementById("output");
+            output.contentDocument.body.innerHTML = htmlcode + "<style>" + csscode + "</style>";
+            output.contentWindow.eval(jscode);
+        }
+        function saveFiles() {
+            const htmlCode = document.getElementById("html-code").value;
+            const cssCode = document.getElementById("css-code").value;
+            const jsCode = document.getElementById("js-code").value;
+            function saveFile(content, filename) {
+                const blob = new Blob([content], { type: "text/plain" });
+                const link = document.createElement("a");
+                link.href = URL.createObjectURL(blob);
+                link.download = filename;
+                link.click();
+                URL.revokeObjectURL(link.href);
+            }
+            saveFile(htmlCode, "index.html");
+            saveFile(cssCode, "index.css");
+            saveFile(jsCode, "index.js");
+        }
+    </script>
+</body>
+
+</html>
